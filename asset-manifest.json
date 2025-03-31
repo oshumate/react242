@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/react242/static/css/main.66736cc6.css",
+    "main.js": "/react242/static/js/main.2537d3b7.js",
+    "static/js/453.c339d30d.chunk.js": "/react242/static/js/453.c339d30d.chunk.js",
+    "static/media/beef.jpg": "/react242/static/media/beef.e384a9054d4bd9d40c85.jpg",
+    "static/media/dinner.jpg": "/react242/static/media/dinner.caabca780ecaa89b2784.jpg",
+    "static/media/exterior2.png": "/react242/static/media/exterior2.774cde7d92d36e066e0f.png",
+    "static/media/exterior1.jpg": "/react242/static/media/exterior1.8cb40d0da32ddd1640a5.jpg",
+    "static/media/interior.jpg": "/react242/static/media/interior.009194eabb84ce4c99f8.jpg",
+    "static/media/breakfast.jpg": "/react242/static/media/breakfast.d344bf02cd80289fd910.jpg",
+    "static/media/lava.jpg": "/react242/static/media/lava.4129772c8ee1c6b06c8d.jpg",
+    "static/media/lunch.jpg": "/react242/static/media/lunch.77ebf40caeaec8ffe068.jpg",
+    "static/media/avocado.jpg": "/react242/static/media/avocado.1b1f0c11bd38cf8f00a0.jpg",
+    "static/media/dessert.jpg": "/react242/static/media/dessert.b05efba1bda4413592ff.jpg",
+    "index.html": "/react242/index.html",
+    "main.66736cc6.css.map": "/react242/static/css/main.66736cc6.css.map",
+    "main.2537d3b7.js.map": "/react242/static/js/main.2537d3b7.js.map",
+    "453.c339d30d.chunk.js.map": "/react242/static/js/453.c339d30d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66736cc6.css",
+    "static/js/main.2537d3b7.js"
+  ]
+}
