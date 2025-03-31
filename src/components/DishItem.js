@@ -4,7 +4,7 @@ import './DishItem.css';
 const DishItem = ({ dish }) => {
   return (
     <div className="dish">
-      <img src={dish.img_name} alt={dish.dishName} />
+      <img src={`${process.env.PUBLIC_URL}/${dish.img_name}`} alt={dish.dishName} />
       <div className="dish-info">
         <h4>{dish.dishName}</h4>
         <p>{dish.description}</p>
