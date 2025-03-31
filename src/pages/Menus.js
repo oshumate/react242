@@ -4,6 +4,12 @@ import Footer from '../components/Footer';
 import DishItem from '../components/DishItem';
 import './Menus.css';
 
+// Import static images from the local images folder
+import breakfastImg from './images/breakfast.jpg';
+import lunchImg from './images/lunch.jpg';
+import dinnerImg from './images/dinner.jpg';
+import dessertImg from './images/dessert.jpg';
+
 const Menus = () => {
   const [jsonMenu, setJsonMenu] = useState({});
 
@@ -44,7 +50,7 @@ const Menus = () => {
         
         {/* Static Menu Sections */}
         <div className="menu-section">
-          <img src="images/breakfast.jpg" alt="Breakfast Dishes" />
+          <img src={breakfastImg} alt="Breakfast Dishes" />
           <h3>Breakfast</h3>
           <ul>
             <li>Classic Pancakes – Fluffy pancakes served with syrup and butter.</li>
@@ -58,7 +64,7 @@ const Menus = () => {
           </ul>
         </div>
         <div className="menu-section">
-          <img src="images/lunch.jpg" alt="Lunch Dishes" />
+          <img src={lunchImg} alt="Lunch Dishes" />
           <h3>Lunch</h3>
           <ul>
             <li>Grilled Chicken Sandwich – Juicy grilled chicken on a toasted bun with lettuce, tomato, and mayo.</li>
@@ -74,7 +80,7 @@ const Menus = () => {
           </ul>
         </div>
         <div className="menu-section">
-          <img src="images/dinner.jpg" alt="Dinner Dishes" />
+          <img src={dinnerImg} alt="Dinner Dishes" />
           <h3>Dinner</h3>
           <ul>
             <li>Grilled Ribeye Steak – A tender, juicy steak grilled to perfection, with veggies and mashed potatoes.</li>
@@ -90,7 +96,7 @@ const Menus = () => {
           </ul>
         </div>
         <div className="menu-section">
-          <img src="images/dessert.jpg" alt="Desserts" />
+          <img src={dessertImg} alt="Desserts" />
           <h3>Desserts</h3>
           <ul>
             <li>Chocolate Lava Cake – A rich chocolate cake with a molten center, served warm with vanilla ice cream.</li>
