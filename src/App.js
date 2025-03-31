@@ -1,21 +1,22 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-// import other pages as needed, e.g. Menus, Reservations, Order, etc.
+import Menus from './pages/Menus';
+import Reservations from './pages/Reservations';
+import Order from './pages/order';
+import Contact from './pages/Contact';
+import Privacy from './pages/Privacy';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* Home Page */}
         <Route path="/" element={<Home />} />
-
-        {/* Future routes:
         <Route path="/menus" element={<Menus />} />
         <Route path="/reservations" element={<Reservations />} />
         <Route path="/order" element={<Order />} />
-        */}
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<Privacy />} />
       </Routes>
     </Router>
   );

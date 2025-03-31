@@ -1,0 +1,86 @@
+:root {
+  --primary-color: #001f3f;
+  --secondary-color: #87CEFA;
+  --accent-color: #ffc107;
+  --text-color: #ffffff;
+  --grey-text: #7a7a7a;
+  --background-color: #f4f4f4;
+  --font-family: 'Lora', serif;
+  --heading-font: 'Montserrat', sans-serif;
+  --success-color: #2ecc71;
+  --error-color: #e74c3c;
+}
+
+.content {
+  padding: 40px 60px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Headings */
+h2, h3 {
+  color: var(--primary-color);
+  font-family: var(--heading-font);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 48px;
+  margin-bottom: 20px;
+  border-bottom: 3px solid var(--accent-color);
+  padding-bottom: 10px;
+}
+
+h3 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+/* Paragraphs */
+p {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+}
+
+/* Button styles */
+.button {
+  display: inline-block;
+  padding: 12px 25px;
+  color: var(--text-color);
+  background-color: var(--primary-color);
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background 0.3s, transform 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-3px);
+}
+
+/* Contact form styles */
+.contact-form {
+  margin-top: 20px;
+}
+
+#form-message {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+#form-message.success {
+  color: var(--success-color);
+}
+
+#form-message.error {
+  color: var(--error-color);
+}

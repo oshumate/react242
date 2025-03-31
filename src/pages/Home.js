@@ -1,30 +1,13 @@
-import React, { useState } from 'react';
-import './Home.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import './Menus.css';
 
-const Home = () => {
-  const [menuActive, setMenuActive] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuActive(!menuActive);
-  };
-
+const Menus = () => {
   return (
-    <>
-      <div className="header">Charliovski's</div>
-
-      <div className={`navbar ${menuActive ? 'active' : ''}`}>
-        <div className="hamburger-menu" onClick={toggleMenu}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <ul>
-          <li><a href="home.html">Home</a></li>
-          <li><a href="menus.html">Menus</a></li>
-          <li><a href="reservations.html">Reservations</a></li>
-          <li><a href="order.html">Order Online</a></li>
-        </ul>
-      </div>
+    <div>
+      <Header />
 
       <div className="content">
         <h2>Welcome to Charliovski's</h2>
@@ -34,10 +17,10 @@ const Home = () => {
           className="responsive-image"
         />
         <p>
-          Experience fine dining with a unique blend of flavors and ambiance. Our
-          carefully crafted menu offers a delightful selection of dishes, made from
-          the freshest ingredients to provide an unforgettable culinary journey.
-          Visit us to indulge in elegance and taste the difference at Charliovski's.
+          Experience fine dining with a unique blend of flavors and ambiance.
+          Our carefully crafted menu offers a delightful selection of dishes,
+          made from the freshest ingredients to provide an unforgettable culinary
+          journey. Visit us to indulge in elegance and taste the difference at Charliovski's.
         </p>
 
         <div className="text-section">
@@ -47,8 +30,8 @@ const Home = () => {
               <img src="images/avocado.jpg" alt="Avocado Toast" className="food-image" />
               <h4>Avocado Toast</h4>
               <p>
-                Freshly mashed avocado on toasted sourdough, topped with cherry
-                tomatoes and a drizzle of olive oil.
+                Freshly mashed avocado on toasted sourdough, topped with cherry tomatoes
+                and a drizzle of olive oil.
               </p>
             </div>
             <div className="dish-item">
@@ -73,13 +56,11 @@ const Home = () => {
           <h3 className="centered">What Our Customers Say</h3>
           <div className="testimonials">
             <blockquote>
-              "The best dining experience I've had in years. The food is always fresh
-              and delicious!"
+              "The best dining experience I've had in years. The food is always fresh and delicious!"
               <footer>- Sarah L.</footer>
             </blockquote>
             <blockquote>
-              "Charliovski's is the perfect place for any occasion. The ambiance and
-              service are top-notch."
+              "Charliovski's is the perfect place for any occasion. The ambiance and service are top-notch."
               <footer>- Michael R.</footer>
             </blockquote>
           </div>
@@ -91,8 +72,7 @@ const Home = () => {
           <ul>
             <li><strong>Happy Hour</strong>: Monday - Friday, 4:00 PM - 6:00 PM</li>
             <li>
-              <strong>Free Dessert</strong>: Get a free dessert with any entrée
-              purchase on your birthday.
+              <strong>Free Dessert</strong>: Get a free dessert with any entrée purchase on your birthday.
             </li>
           </ul>
         </div>
@@ -109,45 +89,20 @@ const Home = () => {
           <div className="iframe-container">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.0195561641245!2d-122.40135008468195!3d37.78874597975633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064d1f5e7e9%3A0xbde81d2c3b3e3d3b!2sGoogle!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus" 
-              allowFullScreen="" 
-              loading="lazy"
-            ></iframe>
+              allowFullScreen
+              loading="lazy">
+            </iframe>
           </div>
         </div>
 
         <div className="text-section centered">
-          <a href="reservations.html" className="button">Make a Reservation</a>
+          <Link to="/reservations" className="button">Make a Reservation</Link>
         </div>
       </div>
 
-      <div className="footer">
-        <div className="footer-container">
-          <div className="footer-section">
-            <h3>Our Hours</h3>
-            <p><strong>Monday - Friday:</strong> 10:00 AM - 10:00 PM</p>
-            <p><strong>Saturday - Sunday:</strong> 11:00 AM - 11:00 PM</p>
-          </div>
-          <div className="footer-section">
-            <h3>Our Locations</h3>
-            <p><strong>Charlotte, NC:</strong> 123 Main St, Charlotte, NC 28202</p>
-            <p><strong>New York, NY:</strong> 456 Broadway, New York, NY 10012</p>
-            <p><strong>Austin, TX:</strong> 789 Congress Ave, Austin, TX 78701</p>
-            <p><strong>Cleveland, OH:</strong> 101 Lakeside Ave, Cleveland, OH 44114</p>
-          </div>
-          <div className="footer-section">
-            <h3>Quick Links</h3>
-            <ul>
-              <li><a href="privacy.html">Privacy Policy</a></li>
-              <li><a href="contact.html">Contact Us</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>&copy; 2025 Charliovski's | All Rights Reserved</p>
-        </div>
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 
-export default Home;
+export default Menus;

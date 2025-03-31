@@ -1,0 +1,114 @@
+:root {
+    --primary-color: #001f3f; 
+    --secondary-color: #87CEFA; 
+    --accent-color: #ffc107; 
+    --text-color: #ffffff;
+    --background-color: #f4f4f4;
+    --font-family: 'Lora', serif; 
+    --heading-font: 'Montserrat', sans-serif;
+  }
+  
+  .header {
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+    text-align: center;
+    padding: 30px 0;
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbar {
+    background-color: var(--primary-color);
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .navbar ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .navbar ul li {
+    margin: 0 25px;
+    position: relative;
+  }
+  
+  .navbar ul li a {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 20px 0;
+    display: block;
+    font-size: 20px;
+    font-weight: 500;
+    transition: color 0.3s, transform 0.3s;
+  }
+  
+  .navbar ul li a::after {
+    content: "|";
+    color: var(--text-color);
+    font-size: 24px;
+    margin-left: 15px;
+    position: absolute;
+    right: -15px;
+  }
+  
+  .navbar ul li:last-child a::after {
+    content: "";
+  }
+  
+  .navbar ul li a:hover {
+    color: var(--secondary-color);
+    transform: scale(1.05);
+  }
+  
+  .navbar ul li a:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+  }
+  
+  .hamburger-menu {
+    display: none;
+    cursor: pointer;
+    padding: 15px 25px;
+  }
+  
+  .hamburger-menu div {
+    background-color: #fff;
+    height: 3px;
+    margin: 5px;
+    width: 25px;
+    transition: all 0.3s;
+  }
+  
+  @media (max-width: 768px) {
+    .hamburger-menu {
+      display: block;
+    }
+    .navbar ul {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+    }
+    .navbar ul li {
+      margin: 0;
+    }
+    .navbar ul li a {
+      padding: 15px;
+      width: 100%;
+    }
+    .navbar.active ul,
+    .navbar ul.active {
+      display: flex;
+    }
+  }
+  
