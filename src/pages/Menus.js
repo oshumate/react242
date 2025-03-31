@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import DishItem from '../components/DishItem';
 import './Menus.css';
 
 const Menus = () => {
@@ -100,21 +101,14 @@ const Menus = () => {
           </ul>
         </div>
         
-        {/* Dynamic JSON Menu Section */}
+        {/* Dynamic JSON Menu Section using DishItem component */}
         <div id="json-menu">
           <h2>Notable Menu Options</h2>
           {Object.entries(jsonMenu).map(([category, dishes]) => (
             <div key={category} className="menu-section">
               <h3>{category}</h3>
               {dishes.map((dish, index) => (
-                <div key={index} className="dish">
-                  <img src={dish.img_name} alt={dish.dishName} />
-                  <div className="dish-info">
-                    <h4>{dish.dishName}</h4>
-                    <p>{dish.description}</p>
-                    <p>{dish.price}</p>
-                  </div>
-                </div>
+                <DishItem key={index} dish={dish} />
               ))}
             </div>
           ))}
