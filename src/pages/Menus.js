@@ -7,22 +7,62 @@ import Lunch from '../components/Lunch';
 import Dinner from '../components/Dinner';
 import Dessert from '../components/Dessert';
 import './Menus.css';
-import jsonMenuData from '../components/menus.json';
 
 const Menus = () => {
   const [jsonMenu, setJsonMenu] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Group imported JSON data by category.
-    const categories = {};
-    jsonMenuData.forEach(item => {
-      if (!categories[item.category]) {
-        categories[item.category] = [];
-      }
-      categories[item.category].push(item);
-    });
-    setJsonMenu(categories);
+    // Using your backend URL to fetch the JSON menu data.
+    fetch('https://render242.onrender.com/')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error fetching menu data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Group the fetched JSON data by category.
+        const categories = {};
+        data.forEach(item => {
+          if (!categories[item.category]) {
+            categories[item.category] = [];
+          }
+          categories[item.category].push(item);
+        });
+        setJsonMenu(categories);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <Header />
+        <div className="content">
+          <p>Loading menus...</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <Header />
+        <div className="content">
+          <p>Error: {error}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -40,7 +80,7 @@ const Menus = () => {
         <Dinner />
         <Dessert />
 
-        {/* Dynamic JSON Menu Section using DishItem component */}
+        {/* Dynamic JSON Menu Section */}
         <div id="json-menu">
           <h2>Notable Menu Options</h2>
           {Object.entries(jsonMenu).map(([category, dishes]) => (
