@@ -1,3 +1,6 @@
+@import url('../components/Header.css');
+@import url('../components/Footer.css');
+
 :root {
   --primary-color: #001f3f;
   --secondary-color: #87CEFA;
@@ -17,7 +20,6 @@ body {
   color: #333;
 }
 
-/* Unique page content styles */
 .content {
   padding: 40px 60px;
   max-width: 1200px;

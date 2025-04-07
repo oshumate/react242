@@ -1,24 +1,23 @@
 .dish {
-    display: flex;
-    margin-bottom: 20px;
-  }
-  
-  .dish img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-right: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dish-info h4 {
-    margin: 0;
-    font-size: 22px;
-    color: var(--primary-color);
-  }
-  
-  .dish-info p {
-    margin: 5px 0;
-  }
-  
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.dish img {
+  width: 100px;   /* Reduced width */
+  height: 100px;  /* Reduced height */
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dish-info h4 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--primary-color);
+}
+
+.dish-info p {
+  margin: 5px 0;
+}

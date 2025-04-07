@@ -1,3 +1,6 @@
+@import url('../components/Header.css');
+@import url('../components/Footer.css');
+
 :root {
   --primary-color: #001f3f;
   --secondary-color: #87CEFA;
@@ -5,64 +8,71 @@
   --text-color: #ffffff;
   --grey-text: #7a7a7a;
   --background-color: #f4f4f4;
-  --font-family: 'Lora', serif;
-  --heading-font: 'Montserrat', sans-serif;
+  --font-family-base: 'Lora', serif;
+  --font-family-heading: 'Montserrat', sans-serif;
+  --base-spacing: 1rem;
 }
 
-/* Content container */
-.content {
-  padding: 40px 20px;
-  max-width: 1200px;
-  margin: auto;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Headings */
-h2 {
+body {
+  font-family: var(--font-family-base);
+  background-color: var(--background-color);
   color: var(--primary-color);
-  font-family: var(--heading-font);
-  font-size: 48px;
-  margin-bottom: 20px;
-  border-bottom: 3px solid var(--accent-color);
-  padding-bottom: 10px;
+  line-height: 1.6;
+}
+
+.content {
+  padding: calc(var(--base-spacing) * 2.5);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h2 {
+  font-family: var(--font-family-heading);
+  font-size: 3rem;
+  margin-bottom: calc(var(--base-spacing) * 1.25);
+  border-bottom: 0.1875rem solid var(--accent-color);
+  padding-bottom: 0.625rem;
   display: inline-block;
   text-transform: uppercase;
+  color: var(--primary-color);
 }
 
 h3 {
-  color: var(--primary-color);
-  font-family: var(--heading-font);
-  font-size: 36px;
-  margin-bottom: 20px;
+  font-family: var(--font-family-heading);
+  font-size: 2.25rem;
+  margin-bottom: calc(var(--base-spacing) * 1.25);
   text-transform: uppercase;
+  color: var(--primary-color);
 }
 
 .centered {
   text-align: center;
 }
 
-/* Paragraphs */
 p {
-  font-size: 18px;
-  line-height: 1.8;
-  margin-bottom: 20px;
+  font-size: 1.125rem;
+  margin-bottom: calc(var(--base-spacing) * 1.25);
 }
 
-/* Responsive images */
 .responsive-image {
   width: 100%;
-  max-width: 100%;
   height: auto;
   display: block;
-  margin-bottom: 30px;
+  margin-bottom: calc(var(--base-spacing) * 1.875);
 }
 
-/* Dish Gallery */
 .dish-gallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: calc(var(--base-spacing) * 1.25);
   justify-content: space-around;
-  margin-top: 30px;
+  margin-top: calc(var(--base-spacing) * 1.875);
 }
 
 .dish-item {
@@ -73,35 +83,33 @@ p {
 
 .food-image {
   width: 100%;
-  max-width: 100%;
   height: auto;
   object-fit: cover;
   display: block;
-  margin: 0 auto 20px;
+  margin: 0 auto calc(var(--base-spacing) * 1.25);
 }
 
-/* Updated Exterior Images Rule */
 .exterior-image {
   width: 100%;
-  max-width: 400px;  /* Fixed maximum width */
-  height: 300px;     /* Fixed height for consistency */
-  object-fit: cover; /* Crop to fill the area */
+  max-width: 400px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
   display: block;
-  margin: 0 auto 20px;
+  margin: 0 auto calc(var(--base-spacing) * 1.25);
 }
 
-/* Testimonials */
 .testimonials blockquote {
   font-style: italic;
-  margin: 20px 0;
+  margin: calc(var(--base-spacing) * 1.25) 0;
+  padding-left: calc(var(--base-spacing) * 0.75);
+  border-left: 0.25rem solid var(--secondary-color);
 }
 
-/* Gallery grid */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  gap: calc(var(--base-spacing) * 1.25);
+  margin-top: calc(var(--base-spacing) * 1.25);
 }
 
 @media (max-width: 768px) {
@@ -110,16 +118,15 @@ p {
   }
 }
 
-/* Iframe Section */
 .iframe-section {
-  margin-bottom: 40px;
+  margin-bottom: calc(var(--base-spacing) * 2.5);
 }
 
 .iframe-container {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 56.25%;
 }
 
 .iframe-container iframe {
@@ -131,23 +138,34 @@ p {
   border: 0;
 }
 
-/* Button */
 .button {
   display: inline-block;
-  padding: 12px 25px;
+  padding: 0.75rem 1.5625rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.0625rem;
   color: var(--text-color);
   background-color: var(--primary-color);
   text-decoration: none;
   border-radius: 30px;
-  font-size: 18px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: background 0.3s, transform 0.3s;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .button:hover,
 .button:focus {
   background-color: var(--secondary-color);
-  transform: translateY(-3px);
+  transform: translateY(-0.1875rem);
+}
+
+@media (max-width: 768px) {
+  h2 {
+    font-size: 2.5rem;
+  }
+  h3 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
+  }
 }

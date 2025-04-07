@@ -1,3 +1,6 @@
+@import url('../components/Header.css');
+@import url('../components/Footer.css');
+
 :root {
   --primary-color: #001f3f;
   --secondary-color: #87CEFA;
@@ -17,7 +20,6 @@ body {
   color: #333;
 }
 
-/* Content container */
 .content {
   padding: 40px 60px;
   max-width: 900px;
@@ -27,7 +29,6 @@ body {
   border-radius: 10px;
 }
 
-/* Headings */
 h2, h3 {
   color: var(--primary-color);
   font-family: var(--heading-font);
@@ -47,7 +48,6 @@ h3 {
   margin-bottom: 10px;
 }
 
-/* Paragraphs */
 p {
   font-size: 18px;
   line-height: 1.8;
@@ -55,7 +55,6 @@ p {
   margin-bottom: 20px;
 }
 
-/* Reservation form styles */
 .reservation-form {
   background: var(--background-color);
   padding: 30px;
@@ -103,7 +102,6 @@ input, select, textarea {
   transform: translateY(-3px);
 }
 
-/* Additional sections */
 .additional-section {
   margin-top: 40px;
 }
@@ -119,12 +117,10 @@ input, select, textarea {
   padding-bottom: 5px;
 }
 
-/* FAQ items */
 .faq-item {
   margin-bottom: 20px;
 }
 
-/* Testimonial section */
 .testimonial-section {
   margin-top: 40px;
 }

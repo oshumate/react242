@@ -1,0 +1,38 @@
+.contact-form {
+    margin: 20px 0;
+  }
+  
+  .contact-form label {
+    font-weight: bold;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .contact-form .button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .contact-form .button:hover {
+    background-color: #45a049;
+  }
+  
+  .contact-form .success {
+    color: green;
+  }
+  
+  .contact-form .error {
+    color: red;
+  }
+  
