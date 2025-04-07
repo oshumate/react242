@@ -14,16 +14,16 @@ const Menus = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Using your backend URL to fetch the JSON menu data.
-    fetch('https://render242.onrender.com/')
+    // Fetch data from your backend endpoint for dishes.
+    fetch('https://render242.onrender.com/api/dishes')
       .then(response => {
         if (!response.ok) {
-          throw new Error('Error fetching menu data');
+          throw new Error(`Error fetching menu data: ${response.status}`);
         }
         return response.json();
       })
       .then(data => {
-        // Group the fetched JSON data by category.
+        // Group the fetched data by category.
         const categories = {};
         data.forEach(item => {
           if (!categories[item.category]) {
@@ -35,6 +35,7 @@ const Menus = () => {
         setLoading(false);
       })
       .catch(err => {
+        console.error('Fetch error:', err);
         setError(err.message);
         setLoading(false);
       });
