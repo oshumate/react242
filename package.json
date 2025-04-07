@@ -1,7 +1,7 @@
 {
   "name": "react242",
   "version": "0.1.0",
-  "homepage": "https://oshumate.github.io/react242",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
