@@ -11,25 +11,25 @@ const Reserve = () => {
     time: '12:00 PM'
   });
   
-  // State for feedback messages and the reservations list
+  // State for feedback messages and the reservations list.
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
 
-  // URL to send reservation data and fetch reservation list from
+  // Absolute URL to send and fetch reservation data
   const reservationsURL = 'https://render242.onrender.com/api/reservations';
 
   // Function to fetch reservations from the server
   const fetchReservations = async () => {
     try {
       const response = await fetch(reservationsURL);
-      if (!response.ok) {
-        throw new Error('Error fetching reservations');
-      }
+      if (!response.ok) throw new Error('Error fetching reservations');
       const data = await response.json();
+      console.log('Reservations fetched from API:', data);
       setReservations(data.reservations);
     } catch (err) {
       console.error(err);
+      setError('Error fetching reservations. Please try again later.');
     }
   };
 
@@ -44,7 +44,7 @@ const Reserve = () => {
       setError('Please fill in all the fields.');
       return false;
     }
-    // Simple regex for validating an email address
+    // Simple email validation
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address.');
@@ -65,9 +65,7 @@ const Reserve = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) {
-      return;
-    }
+    if (!validate()) return;
     try {
       const response = await fetch(reservationsURL, {
         method: 'POST',
@@ -75,9 +73,10 @@ const Reserve = () => {
         body: JSON.stringify(formData)
       });
       const data = await response.json();
+      console.log('Reservation POST response:', data);
       if (data.success) {
         setMessage('Reservation confirmed!');
-        // Reset the form
+        // Reset form
         setFormData({
           name: '',
           email: '',
@@ -85,8 +84,7 @@ const Reserve = () => {
           date: '',
           time: '12:00 PM'
         });
-        // Refresh the reservations list
-        fetchReservations();
+        fetchReservations(); // Refresh the list
       } else {
         setError(data.message || 'Reservation could not be added.');
       }
