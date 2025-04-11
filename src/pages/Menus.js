@@ -13,8 +13,9 @@ const Menus = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+
+  //Fetch backend
   useEffect(() => {
-    // Fetch data from your backend endpoint for dishes.
     fetch('https://render242.onrender.com/api/dishes')
       .then(response => {
         if (!response.ok) {
@@ -23,7 +24,6 @@ const Menus = () => {
         return response.json();
       })
       .then(data => {
-        // Group the fetched data by category.
         const categories = {};
         data.forEach(item => {
           if (!categories[item.category]) {
@@ -74,14 +74,12 @@ const Menus = () => {
           At Charliovski’s, we offer a wide variety of dishes for every meal of the day.
           Below you'll find our complete menu along with a section loaded dynamically from JSON.
         </p>
-        
-        {/* Static Menu Sections */}
+
         <Breakfast />
         <Lunch />
         <Dinner />
         <Dessert />
 
-        {/* Dynamic JSON Menu Section */}
         <div id="json-menu">
           <h2>Notable Menu Options</h2>
           {Object.entries(jsonMenu).map(([category, dishes]) => (
