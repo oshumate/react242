@@ -11,16 +11,21 @@ const Reserve = () => {
     time: '12:00 PM'
   });
   
-  // State for feedback messages and the reservation list.
+  // State for feedback messages and the reservations list
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
 
+  // URL to send reservation data and fetch reservation list from
+  const reservationsURL = 'https://render242.onrender.com/api/reservations';
+
   // Function to fetch reservations from the server
   const fetchReservations = async () => {
     try {
-      const response = await fetch('/api/reservations');
-      if (!response.ok) throw new Error('Error fetching reservations');
+      const response = await fetch(reservationsURL);
+      if (!response.ok) {
+        throw new Error('Error fetching reservations');
+      }
       const data = await response.json();
       setReservations(data.reservations);
     } catch (err) {
@@ -28,18 +33,18 @@ const Reserve = () => {
     }
   };
 
-  // Fetch reservations when the component mounts.
+  // Fetch reservations when the component mounts
   useEffect(() => {
     fetchReservations();
   }, []);
 
-  // Basic client side validation that can be enhanced to match your Joi rules.
+  // Basic client-side validation
   const validate = () => {
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
       setError('Please fill in all the fields.');
       return false;
     }
-    // Example email pattern check
+    // Simple regex for validating an email address
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address.');
@@ -64,7 +69,7 @@ const Reserve = () => {
       return;
     }
     try {
-      const response = await fetch('/api/reservations', {
+      const response = await fetch(reservationsURL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -72,6 +77,7 @@ const Reserve = () => {
       const data = await response.json();
       if (data.success) {
         setMessage('Reservation confirmed!');
+        // Reset the form
         setFormData({
           name: '',
           email: '',
@@ -79,7 +85,8 @@ const Reserve = () => {
           date: '',
           time: '12:00 PM'
         });
-        fetchReservations(); // Refresh the reservations list
+        // Refresh the reservations list
+        fetchReservations();
       } else {
         setError(data.message || 'Reservation could not be added.');
       }
