@@ -8,15 +8,16 @@ const Reserve = () => {
     email: '',
     phone: '',
     date: '',
-    time: '12:00 PM'
+    time: ''
   });
 
-  // State for feedback messages and the reservations list.
+  // State for feedback, reservations list, and available time slots.
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
+  const [availableTimes, setAvailableTimes] = useState([]);
 
-  // Absolute URL to send and fetch reservation data.
+  // The API endpoint for reservations.
   const reservationsURL = 'https://render242.onrender.com/api/reservations';
 
   // Fetch reservations from the server.
@@ -25,7 +26,7 @@ const Reserve = () => {
       const response = await fetch(reservationsURL);
       if (!response.ok) throw new Error('Error fetching reservations');
       const data = await response.json();
-      console.log('Reservations fetched from API:', data);
+      console.log('Reservations fetched:', data);
       setReservations(data.reservations);
     } catch (err) {
       console.error(err);
@@ -38,13 +39,74 @@ const Reserve = () => {
     fetchReservations();
   }, []);
 
-  // Basic client-side validation.
+  // Helper to format a Date object to "h:mm AM/PM".
+  const formatTime = (date) => {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let suffix = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${hours}:${minutes} ${suffix}`;
+  };
+
+  // Generate available time slots when a date is selected or when reservations change.
+  useEffect(() => {
+    if (!formData.date) {
+      setAvailableTimes([]);
+      return;
+    }
+
+    const dateObj = new Date(formData.date);
+    const day = dateObj.getDay(); // Sunday is 0, Monday is 1, ... Saturday is 6.
+    let startHour, endHour;
+
+    // Monday to Friday.
+    if (day >= 1 && day <= 5) {
+      startHour = 10;
+      endHour = 22;
+    } else {
+      // Saturday (6) or Sunday (0).
+      startHour = 11;
+      endHour = 23;
+    }
+
+    const slots = [];
+    let currentTime = new Date(dateObj);
+    currentTime.setHours(startHour, 0, 0, 0);
+    const endTime = new Date(dateObj);
+    endTime.setHours(endHour, 0, 0, 0);
+
+    // Create slots every 30 minutes.
+    while (currentTime <= endTime) {
+      slots.push(formatTime(new Date(currentTime)));
+      currentTime.setMinutes(currentTime.getMinutes() + 30);
+    }
+
+    // Get reserved times for the selected date.
+    const reservedTimes = reservations
+      .filter(r => r.date === formData.date)
+      .map(r => r.time);
+
+    // Filter out the reserved slots.
+    const available = slots.filter(time => !reservedTimes.includes(time));
+
+    // Update selected time if necessary.
+    if (available.length > 0 && !available.includes(formData.time)) {
+      setFormData(prev => ({ ...prev, time: available[0] }));
+    } else if (available.length === 0) {
+      setFormData(prev => ({ ...prev, time: '' }));
+    }
+
+    setAvailableTimes(available);
+  }, [formData.date, reservations]);
+
+  // Simple client-side validation.
   const validate = () => {
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
       setError('Please fill in all the fields.');
       return false;
     }
-    // Simple email validation.
+    // Basic email regex.
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address.');
@@ -53,7 +115,7 @@ const Reserve = () => {
     return true;
   };
 
-  // Handle form input changes.
+  // Handle input changes.
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -62,10 +124,20 @@ const Reserve = () => {
     setError('');
   };
 
-  // Handle form submission.
+  // Handle the reservation form submission.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
+
+    // Check if a reservation already exists for this date and time.
+    const duplicateReservation = reservations.some(
+      r => r.date === formData.date && r.time === formData.time
+    );
+    if (duplicateReservation) {
+      setError('This time slot is already reserved. Please choose another time.');
+      return;
+    }
+
     try {
       const response = await fetch(reservationsURL, {
         method: 'POST',
@@ -76,7 +148,6 @@ const Reserve = () => {
       console.log('Reservation POST response:', data);
       if (data.success) {
         setMessage('Reservation confirmed!');
-        // Show a pop-up message on successful reservation.
         alert('Reservation confirmed!');
         // Reset the form.
         setFormData({
@@ -84,7 +155,7 @@ const Reserve = () => {
           email: '',
           phone: '',
           date: '',
-          time: '12:00 PM'
+          time: ''
         });
         fetchReservations(); // Refresh the reservations list.
       } else {
@@ -155,11 +226,17 @@ const Reserve = () => {
               value={formData.time} 
               onChange={handleChange} 
               required
+              disabled={!formData.date || availableTimes.length === 0}
             >
-              <option value="12:00 PM">12:00 PM</option>
-              <option value="2:00 PM">2:00 PM</option>
-              <option value="6:00 PM">6:00 PM</option>
-              <option value="8:00 PM">8:00 PM</option>
+              {availableTimes.length > 0 ? (
+                availableTimes.map((timeSlot, index) => (
+                  <option key={index} value={timeSlot}>
+                    {timeSlot}
+                  </option>
+                ))
+              ) : (
+                <option value="">Select a date for available times</option>
+              )}
             </select>
           </div>
           <button type="submit" className="button">Confirm Reservation</button>
