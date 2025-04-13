@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './reserve.css';
 
 const Reserve = () => {
-  // State for form inputs.
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -11,16 +10,13 @@ const Reserve = () => {
     time: ''
   });
 
-  // State for feedback, reservations list, and available time slots.
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
 
-  // The API endpoint for reservations.
   const reservationsURL = 'https://render242.onrender.com/api/reservations';
 
-  // Fetch reservations from the server.
   const fetchReservations = async () => {
     try {
       const response = await fetch(reservationsURL);
@@ -34,19 +30,16 @@ const Reserve = () => {
     }
   };
 
-  // Fetch reservations when the component mounts.
   useEffect(() => {
     fetchReservations();
   }, []);
 
-  // Additionally, refetch reservations whenever a new date is selected.
   useEffect(() => {
     if (formData.date) {
       fetchReservations();
     }
   }, [formData.date]);
 
-  // Helper to format a Date object to "h:mm AM/PM".
   const formatTime = (date) => {
     let hours = date.getHours();
     let minutes = date.getMinutes();
@@ -56,7 +49,6 @@ const Reserve = () => {
     return `${hours}:${minutes} ${suffix}`;
   };
 
-  // Generate available time slots when a date is selected or when reservations change.
   useEffect(() => {
     if (!formData.date) {
       setAvailableTimes([]);
@@ -64,15 +56,13 @@ const Reserve = () => {
     }
 
     const dateObj = new Date(formData.date);
-    const day = dateObj.getDay(); // Sunday is 0, Monday is 1, ... Saturday is 6.
+    const day = dateObj.getDay(); 
     let startHour, endHour;
 
-    // Monday to Friday.
     if (day >= 1 && day <= 5) {
       startHour = 10;
       endHour = 22;
     } else {
-      // Saturday or Sunday.
       startHour = 11;
       endHour = 23;
     }
@@ -83,21 +73,17 @@ const Reserve = () => {
     const endTime = new Date(dateObj);
     endTime.setHours(endHour, 0, 0, 0);
 
-    // Create slots every 15 minutes.
     while (currentTime <= endTime) {
       slots.push(formatTime(new Date(currentTime)));
       currentTime.setMinutes(currentTime.getMinutes() + 15);
     }
 
-    // Get reserved times for the selected date.
     const reservedTimes = reservations
       .filter(r => r.date === formData.date)
       .map(r => r.time);
 
-    // Filter out the reserved slots.
     const available = slots.filter(time => !reservedTimes.includes(time));
 
-    // Update selected time if necessary.
     if (available.length > 0 && !available.includes(formData.time)) {
       setFormData(prev => ({ ...prev, time: available[0] }));
     } else if (available.length === 0) {
@@ -107,13 +93,11 @@ const Reserve = () => {
     setAvailableTimes(available);
   }, [formData.date, reservations]);
 
-  // Simple client-side validation.
   const validate = () => {
     if (!formData.name || !formData.email || !formData.phone || !formData.date || !formData.time) {
       setError('Please fill in all the fields.');
       return false;
     }
-    // Basic email regex.
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(formData.email)) {
       setError('Please enter a valid email address.');
@@ -122,7 +106,6 @@ const Reserve = () => {
     return true;
   };
 
-  // Handle input changes.
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -131,12 +114,10 @@ const Reserve = () => {
     setError('');
   };
 
-  // Handle the reservation form submission.
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Check if a reservation already exists for this date and time.
     const duplicateReservation = reservations.some(
       r => r.date === formData.date && r.time === formData.time
     );
@@ -156,7 +137,6 @@ const Reserve = () => {
       if (data.success) {
         setMessage('Reservation confirmed!');
         alert('Reservation confirmed!');
-        // Reset the form.
         setFormData({
           name: '',
           email: '',
@@ -164,7 +144,7 @@ const Reserve = () => {
           date: '',
           time: ''
         });
-        fetchReservations(); // Refresh the reservations list.
+        fetchReservations(); 
       } else {
         setError(data.message || 'Reservation could not be added.');
       }
