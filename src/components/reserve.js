@@ -39,6 +39,13 @@ const Reserve = () => {
     fetchReservations();
   }, []);
 
+  // Additionally, refetch reservations whenever a new date is selected.
+  useEffect(() => {
+    if (formData.date) {
+      fetchReservations();
+    }
+  }, [formData.date]);
+
   // Helper to format a Date object to "h:mm AM/PM".
   const formatTime = (date) => {
     let hours = date.getHours();
@@ -65,7 +72,7 @@ const Reserve = () => {
       startHour = 10;
       endHour = 22;
     } else {
-      // Saturday (6) or Sunday (0).
+      // Saturday or Sunday.
       startHour = 11;
       endHour = 23;
     }
@@ -76,10 +83,10 @@ const Reserve = () => {
     const endTime = new Date(dateObj);
     endTime.setHours(endHour, 0, 0, 0);
 
-    // Create slots every 30 minutes.
+    // Create slots every 15 minutes.
     while (currentTime <= endTime) {
       slots.push(formatTime(new Date(currentTime)));
-      currentTime.setMinutes(currentTime.getMinutes() + 30);
+      currentTime.setMinutes(currentTime.getMinutes() + 15);
     }
 
     // Get reserved times for the selected date.
