@@ -33,23 +33,32 @@ const Reserve = () => {
 
   // recompute slots whenever date, list, or edit‑mode changes
   useEffect(() => {
-    if (!formData.date) return setAvailableTimes([]);
+    if (!formData.date) {
+      setAvailableTimes([]);
+      return;
+    }
+
     const d = new Date(formData.date);
     const day = d.getDay();
-    const start = day >= 1 && day <= 5 ? 10 : 11;
-    const end   = day >= 1 && day <= 5 ? 22 : 23;
+    const isWeekday = day >= 1 && day <= 5;
+
+    // Restaurant hours:
+    //   Mon–Fri → 10:00 (10) to 22:00 (10 PM)
+    //   Sat–Sun → 11:00 (11) to 23:00 (11 PM)
+    const startHour = isWeekday ? 10 : 11;
+    const endHour   = isWeekday ? 22 : 23;
 
     const slots = [];
     const cur = new Date(d);
-    cur.setHours(start, 0, 0, 0);
+    cur.setHours(startHour, 0, 0, 0);
     const cutoff = new Date(d);
-    cutoff.setHours(end, 0, 0, 0);
+    cutoff.setHours(endHour, 0, 0, 0);
 
     while (cur <= cutoff) {
-      const h = cur.getHours() % 12 || 12;
-      const m = cur.getMinutes().toString().padStart(2, '0');
+      const hour12 = cur.getHours() % 12 || 12;
+      const minute = String(cur.getMinutes()).padStart(2, '0');
       const suffix = cur.getHours() >= 12 ? 'PM' : 'AM';
-      slots.push(`${h}:${m} ${suffix}`);
+      slots.push(`${hour12}:${minute} ${suffix}`);
       cur.setMinutes(cur.getMinutes() + 15);
     }
 
@@ -61,6 +70,7 @@ const Reserve = () => {
     const avail = slots.filter(t => !taken.includes(t));
     setAvailableTimes(avail);
 
+    // if current selection is no longer valid, pick the first available
     if (!avail.includes(formData.time)) {
       setFormData(fd => ({ ...fd, time: avail[0] || '' }));
     }
@@ -144,7 +154,7 @@ const Reserve = () => {
         {error   && <p className="error-message">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          {/* === Name === */}
+          {/* Name */}
           <div className="form-group">
             <label htmlFor="name">Full Name</label>
             <input
@@ -157,7 +167,7 @@ const Reserve = () => {
             />
           </div>
 
-          {/* === Email === */}
+          {/* Email */}
           <div className="form-group">
             <label htmlFor="email">Email Address</label>
             <input
@@ -170,7 +180,7 @@ const Reserve = () => {
             />
           </div>
 
-          {/* === Phone === */}
+          {/* Phone */}
           <div className="form-group">
             <label htmlFor="phone">Phone Number</label>
             <input
@@ -183,7 +193,7 @@ const Reserve = () => {
             />
           </div>
 
-          {/* === Date === */}
+          {/* Date */}
           <div className="form-group">
             <label htmlFor="date">Reservation Date</label>
             <input
@@ -196,7 +206,7 @@ const Reserve = () => {
             />
           </div>
 
-          {/* === Time === */}
+          {/* Time */}
           <div className="form-group">
             <label htmlFor="time">Time</label>
             <select
@@ -208,7 +218,7 @@ const Reserve = () => {
               disabled={!formData.date || availableTimes.length === 0}
             >
               {availableTimes.length > 0
-                ? availableTimes.map((t,i) => <option key={i} value={t}>{t}</option>)
+                ? availableTimes.map((t, i) => <option key={i} value={t}>{t}</option>)
                 : <option value="">Select a date for times</option>
               }
             </select>
@@ -223,7 +233,7 @@ const Reserve = () => {
               className="button cancel"
               onClick={() => {
                 setEditingId(null);
-                setFormData({ name:'',email:'',phone:'',date:'',time:'' });
+                setFormData({ name:'', email:'', phone:'', date:'', time:'' });
                 setError('');
                 setMessage('');
               }}
@@ -241,18 +251,8 @@ const Reserve = () => {
             {reservations.map(r => (
               <li key={r._id}>
                 {r.name} — {r.email} — {r.phone} — {r.date} @ {r.time}
-                <button
-                  type="button"
-                  onClick={() => startEdit(r)}
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(r._id)}
-                >
-                  Delete
-                </button>
+                <button type="button" onClick={() => startEdit(r)}>Edit</button>
+                <button type="button" onClick={() => handleDelete(r._id)}>Delete</button>
               </li>
             ))}
           </ul>
