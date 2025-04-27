@@ -9,15 +9,17 @@ const Reserve = () => {
     date: '',
     time: ''
   });
-  const [file, setFile] = useState(null);                 // ← new
+  const [file, setFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [reservations, setReservations] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
 
-  // ← point to your Render backend:
+  // API endpoint:
   const BASE = 'https://render242.onrender.com/api/reservations';
+  // to serve uploaded images:
+  const IMAGE_BASE = 'https://render242.onrender.com';
 
   // load list
   const fetchReservations = async () => {
@@ -45,8 +47,8 @@ const Reserve = () => {
     const isWeekday = day >= 1 && day <= 5;
 
     // Restaurant hours:
-    //   Mon–Fri → 10:00 (10) to 22:00 (10 PM)
-    //   Sat–Sun → 11:00 (11) to 23:00 (11 PM)
+    //   Mon–Fri → 10:00 to 22:00
+    //   Sat–Sun → 11:00 to 23:00
     const startHour = isWeekday ? 10 : 11;
     const endHour   = isWeekday ? 22 : 23;
 
@@ -56,7 +58,7 @@ const Reserve = () => {
     const cutoff = new Date(d);
     cutoff.setHours(endHour, 0, 0, 0);
 
-    while (cur < cutoff) {                                 // ← last slot 15m before close
+    while (cur < cutoff) {
       const hour12 = cur.getHours() % 12 || 12;
       const minute = String(cur.getMinutes()).padStart(2, '0');
       const suffix = cur.getHours() >= 12 ? 'PM' : 'AM';
@@ -64,7 +66,6 @@ const Reserve = () => {
       cur.setMinutes(cur.getMinutes() + 15);
     }
 
-    // exclude times taken by others (but allow the one we're editing)
     const taken = reservations
       .filter(r => r.date === formData.date && r._id !== editingId)
       .map(r => r.time);
@@ -72,7 +73,6 @@ const Reserve = () => {
     const avail = slots.filter(t => !taken.includes(t));
     setAvailableTimes(avail);
 
-    // if current selection is no longer valid, pick the first available
     if (!avail.includes(formData.time)) {
       setFormData(fd => ({ ...fd, time: avail[0] || '' }));
     }
@@ -97,7 +97,7 @@ const Reserve = () => {
     setError('');
   };
 
-  const handleFile = e => {                                // ← new
+  const handleFile = e => {
     setFile(e.target.files[0]);
   };
 
@@ -108,7 +108,6 @@ const Reserve = () => {
     const method = editingId ? 'PUT' : 'POST';
     const url    = editingId ? `${BASE}/${editingId}` : BASE;
 
-    // build FormData
     const fd = new FormData();
     Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
     if (file) fd.append('picture', file);
@@ -125,7 +124,7 @@ const Reserve = () => {
       setError('');
       setEditingId(null);
       setFormData({ name:'', email:'', phone:'', date:'', time:'' });
-      setFile(null);                                       // ← new
+      setFile(null);
       fetchReservations();
     } catch (err) {
       setError(err.message);
@@ -141,7 +140,7 @@ const Reserve = () => {
       date:  r.date,
       time:  r.time
     });
-    setFile(null);                                        // ← new
+    setFile(null);
     setMessage('');
     setError('');
   };
@@ -236,7 +235,7 @@ const Reserve = () => {
             </select>
           </div>
 
-          {/* Picture upload (new) */}
+          {/* Picture upload */}
           <div className="form-group">
             <label htmlFor="picture">Picture</label>
             <input
@@ -258,7 +257,7 @@ const Reserve = () => {
               onClick={() => {
                 setEditingId(null);
                 setFormData({ name:'', email:'', phone:'', date:'', time:'' });
-                setFile(null);                           // ← new
+                setFile(null);
                 setError('');
                 setMessage('');
               }}
@@ -272,17 +271,23 @@ const Reserve = () => {
         {reservations.length > 0 ? (
           <ul>
             {reservations.map(r => (
-              <li key={r._id}>
-                {r.name} — {r.email} — {r.phone} — {r.date} @ {r.time}
+              <li key={r._id} className="reservation-item">
                 {r.pictureUrl && (
                   <img
-                    src={r.pictureUrl}
-                    alt="reservation"
-                    style={{ maxWidth:80, marginLeft:10 }}
+                    src={`${IMAGE_BASE}${r.pictureUrl}`}
+                    alt={`${r.name}'s upload`}
+                    className="reservation-thumb"
                   />
                 )}
-                <button type="button" onClick={() => startEdit(r)}>Edit</button>
-                <button type="button" onClick={() => handleDelete(r._id)}>Delete</button>
+                <div className="reservation-details">
+                  <p><strong>{r.name}</strong></p>
+                  <p>{r.email} • {r.phone}</p>
+                  <p>{r.date} @ {r.time}</p>
+                </div>
+                <div className="reservation-actions">
+                  <button onClick={() => startEdit(r)}>Edit</button>
+                  <button onClick={() => handleDelete(r._id)}>Delete</button>
+                </div>
               </li>
             ))}
           </ul>
