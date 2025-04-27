@@ -16,6 +16,7 @@ const Reserve = () => {
   const [reservations, setReservations] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
 
+  // ← point to your Render backend:
   const BASE = 'https://render242.onrender.com/api/reservations';
 
   // load list
@@ -55,7 +56,7 @@ const Reserve = () => {
     const cutoff = new Date(d);
     cutoff.setHours(endHour, 0, 0, 0);
 
-    while (cur < cutoff) {                                 // ← changed from <= to <
+    while (cur < cutoff) {                                 // ← last slot 15m before close
       const hour12 = cur.getHours() % 12 || 12;
       const minute = String(cur.getMinutes()).padStart(2, '0');
       const suffix = cur.getHours() >= 12 ? 'PM' : 'AM';
@@ -107,7 +108,7 @@ const Reserve = () => {
     const method = editingId ? 'PUT' : 'POST';
     const url    = editingId ? `${BASE}/${editingId}` : BASE;
 
-    // build FormData instead of JSON
+    // build FormData
     const fd = new FormData();
     Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
     if (file) fd.append('picture', file);
@@ -257,13 +258,11 @@ const Reserve = () => {
               onClick={() => {
                 setEditingId(null);
                 setFormData({ name:'', email:'', phone:'', date:'', time:'' });
-                setFile(null);                              // ← new
+                setFile(null);                           // ← new
                 setError('');
                 setMessage('');
               }}
-            >
-              Cancel
-            </button>
+            >Cancel</button>
           )}
         </form>
       </div>
@@ -279,7 +278,7 @@ const Reserve = () => {
                   <img
                     src={r.pictureUrl}
                     alt="reservation"
-                    style={{ maxWidth: 80, marginLeft: 10 }}
+                    style={{ maxWidth:80, marginLeft:10 }}
                   />
                 )}
                 <button type="button" onClick={() => startEdit(r)}>Edit</button>
