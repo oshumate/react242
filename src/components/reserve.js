@@ -68,9 +68,19 @@ const Reserve = () => {
   }, [formData.date, reservations, editingId]);
 
   const validate = () => {
-    if (!formData.name || !formData.email || !formData.phone
-      || !formData.date || !formData.time) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.date ||
+      !formData.time
+    ) {
       setError('Please fill in all fields.');
+      return false;
+    }
+    // **new: require a picture**
+    if (!file) {
+      setError('Please upload a picture.');
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(formData.email)) {
@@ -87,6 +97,7 @@ const Reserve = () => {
   };
   const handleFile = e => {
     setFile(e.target.files[0]);
+    setError('');
   };
 
   const handleSubmit = async e => {
@@ -98,7 +109,8 @@ const Reserve = () => {
 
     const fd = new FormData();
     Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
-    if (file) fd.append('picture', file);
+    // always append picture now
+    fd.append('picture', file);
 
     try {
       const res = await fetch(url, { method, body: fd });
@@ -119,8 +131,11 @@ const Reserve = () => {
   const startEdit = r => {
     setEditingId(r._id);
     setFormData({
-      name: r.name, email: r.email,
-      phone: r.phone, date: r.date, time: r.time
+      name: r.name,
+      email: r.email,
+      phone: r.phone,
+      date: r.date,
+      time: r.time
     });
     setFile(null);
     setMessage('');
@@ -130,7 +145,7 @@ const Reserve = () => {
   const handleDelete = async id => {
     if (!window.confirm('Delete this reservation?')) return;
     try {
-      const res = await fetch(`${BASE}/${id}`, { method:'DELETE' });
+      const res = await fetch(`${BASE}/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error();
       setMessage('Reservation deleted.');
       fetchReservations();
@@ -191,11 +206,17 @@ const Reserve = () => {
             </select>
           </div>
 
-          {/* Picture */}
+          {/* Picture (now required) */}
           <div className="form-group">
             <label htmlFor="picture">Picture</label>
-            <input id="picture" name="picture" type="file"
-              accept="image/*" onChange={handleFile} />
+            <input
+              id="picture"
+              name="picture"
+              type="file"
+              accept="image/*"
+              onChange={handleFile}
+              required
+            />
           </div>
 
           <button type="submit" className="button">
@@ -205,7 +226,7 @@ const Reserve = () => {
             <button type="button" className="button cancel"
               onClick={() => {
                 setEditingId(null);
-                setFormData({ name:'',email:'',phone:'',date:'',time:'' });
+                setFormData({ name:'', email:'', phone:'', date:'', time:'' });
                 setFile(null);
                 setError('');
                 setMessage('');
@@ -244,8 +265,7 @@ const Reserve = () => {
         }
       </div>
     </div>
-);
-
+  );
 };
 
 export default Reserve;
