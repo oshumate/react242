@@ -29,6 +29,7 @@ const Reserve = () => {
       setError('Could not load reservations.');
     }
   };
+
   useEffect(fetchReservations, []);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const Reserve = () => {
     const day = d.getDay();
     const isWeekday = day >= 1 && day <= 5;
     const startHour = isWeekday ? 10 : 11;
-    const endHour   = isWeekday ? 22 : 23;
+    const endHour = isWeekday ? 22 : 23;
     const slots = [];
     const cur = new Date(d);
     cur.setHours(startHour, 0, 0, 0);
@@ -78,7 +79,6 @@ const Reserve = () => {
       setError('Please fill in all fields.');
       return false;
     }
-    // **new: require a picture**
     if (!file) {
       setError('Please upload a picture.');
       return false;
@@ -95,6 +95,7 @@ const Reserve = () => {
     setFormData(fd => ({ ...fd, [name]: value }));
     setError('');
   };
+
   const handleFile = e => {
     setFile(e.target.files[0]);
     setError('');
@@ -103,24 +104,19 @@ const Reserve = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     if (!validate()) return;
-
     const method = editingId ? 'PUT' : 'POST';
-    const url    = editingId ? `${BASE}/${editingId}` : BASE;
-
+    const url = editingId ? `${BASE}/${editingId}` : BASE;
     const fd = new FormData();
     Object.entries(formData).forEach(([k, v]) => fd.append(k, v));
-    // always append picture now
     fd.append('picture', file);
-
     try {
       const res = await fetch(url, { method, body: fd });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Server error');
-
       setMessage(editingId ? 'Reservation updated!' : 'Reservation confirmed!');
       setError('');
       setEditingId(null);
-      setFormData({ name:'', email:'', phone:'', date:'', time:'' });
+      setFormData({ name: '', email: '', phone: '', date: '', time: '' });
       setFile(null);
       fetchReservations();
     } catch (err) {
@@ -159,54 +155,69 @@ const Reserve = () => {
       <div className="reservation-form">
         <h3>{editingId ? 'Edit Reservation' : 'Make a Reservation'}</h3>
         {message && <p className="success-message">{message}</p>}
-        {error   && <p className="error-message">{error}</p>}
-
+        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-          {/* Name */}
           <div className="form-group">
             <label htmlFor="name">Full Name</label>
-            <input id="name" name="name" type="text"
-              value={formData.name} onChange={handleChange} required />
+            <input
+              id="name"
+              name="name"
+              type="text"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
-
-          {/* Email */}
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input id="email" name="email" type="email"
-              value={formData.email} onChange={handleChange} required />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
           </div>
-
-          {/* Phone */}
           <div className="form-group">
             <label htmlFor="phone">Phone</label>
-            <input id="phone" name="phone" type="tel"
-              value={formData.phone} onChange={handleChange} required />
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
           </div>
-
-          {/* Date */}
           <div className="form-group">
             <label htmlFor="date">Date</label>
-            <input id="date" name="date" type="date"
-              value={formData.date} onChange={handleChange} required />
+            <input
+              id="date"
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+              required
+            />
           </div>
-
-          {/* Time */}
           <div className="form-group">
             <label htmlFor="time">Time</label>
-            <select id="time" name="time"
-              value={formData.time} onChange={handleChange}
-              required disabled={!formData.date || !availableTimes.length}
+            <select
+              id="time"
+              name="time"
+              value={formData.time}
+              onChange={handleChange}
+              required
+              disabled={!formData.date || !availableTimes.length}
             >
-              {availableTimes.length
-                ? availableTimes.map((t,i) =>
-                    <option key={i} value={t}>{t}</option>
-                  )
-                : <option value="">Select a date first</option>
-              }
+              {availableTimes.length ? (
+                availableTimes.map((t, i) => <option key={i} value={t}>{t}</option>)
+              ) : (
+                <option value="">Select a date first</option>
+              )}
             </select>
           </div>
-
-          {/* Picture (now required) */}
           <div className="form-group">
             <label htmlFor="picture">Picture</label>
             <input
@@ -218,51 +229,54 @@ const Reserve = () => {
               required
             />
           </div>
-
           <button type="submit" className="button">
             {editingId ? 'Update' : 'Confirm'}
           </button>
           {editingId && (
-            <button type="button" className="button cancel"
+            <button
+              type="button"
+              className="button cancel"
               onClick={() => {
                 setEditingId(null);
-                setFormData({ name:'', email:'', phone:'', date:'', time:'' });
+                setFormData({ name: '', email: '', phone: '', date: '', time: '' });
                 setFile(null);
                 setError('');
                 setMessage('');
               }}
-            >Cancel</button>
+            >
+              Cancel
+            </button>
           )}
         </form>
       </div>
-
       <div className="reservations-list">
         <h3>Reservations</h3>
-        {reservations.length
-          ? <ul>
-              {reservations.map(r => (
-                <li key={r._id} className="reservation-item">
-                  {r.pictureUrl && (
-                    <img
-                      src={`${IMAGE_BASE}${r.pictureUrl}`}
-                      alt={`${r.name}'s pic`}
-                      className="reservation-thumb"
-                    />
-                  )}
-                  <div className="reservation-details">
-                    <p className="res-name">{r.name}</p>
-                    <p className="res-contact">{r.email} • {r.phone}</p>
-                    <p className="res-datetime">{r.date} @ {r.time}</p>
-                  </div>
-                  <div className="reservation-actions">
-                    <button onClick={() => startEdit(r)}>Edit</button>
-                    <button onClick={() => handleDelete(r._id)}>Delete</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          : <p>No reservations yet.</p>
-        }
+        {reservations.length ? (
+          <ul>
+            {reservations.map(r => (
+              <li key={r._id} className="reservation-item">
+                {r.pictureUrl && (
+                  <img
+                    src={`${IMAGE_BASE}${r.pictureUrl}`}
+                    alt={`${r.name}'s pic`}
+                    className="reservation-thumb"
+                  />
+                )}
+                <div className="reservation-details">
+                  <p className="res-name">{r.name}</p>
+                  <p className="res-contact">{r.email} • {r.phone}</p>
+                  <p className="res-datetime">{r.date} @ {r.time}</p>
+                </div>
+                <div className="reservation-actions">
+                  <button onClick={() => startEdit(r)}>Edit</button>
+                  <button onClick={() => handleDelete(r._id)}>Delete</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No reservations yet.</p>
+        )}
       </div>
     </div>
   );
